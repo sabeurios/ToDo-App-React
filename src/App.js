@@ -1,26 +1,65 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Input from './Component/Input';
+import List from './Component/List';
 
-function App() {
+
+class App extends React.Component {
+  constructor(){
+    super()
+    this.state =  {
+                    items:[ {text:"item-1",isCompleted:false},
+                            {text:"item-2",isCompleted:false},
+                            {text:"item-3",isCompleted:false}
+                          ],
+                    input: ""
+                  }
+  };
+
+  handleChange = e => {
+    this.setState({
+      input: e.target.value
+    });
+  };
+
+  handleAddItem = () => {
+    this.setState({
+      items:[...this.state.items,{text:this.state.input}]
+    })
+  }
+
+  handleDelete=(indice)=>{
+    this.setState({
+      items: this.state.items.filter((elt,key) => key!==indice)
+    })
+  }
+
+  handleCompleteOrUndo=(id)=>{
+    this.setState({
+      items: this.state.items.map( (elt,index) => (id===index) ? {...elt,isCompleted:!elt.isCompleted} : elt )
+    })
+  }
+
+  render(){  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
+          <div className="App">
+            <header>
+              <h1>To-Do-App!</h1>    
+              <h4>Add New To-Do</h4>  
+              <Input  input={this.input} 
+                      handleChange={this.handleChange}
+                      handleAddItem={this.handleAddItem}/> 
+           </header>
+           <div className="main">
+              <h2 classe="items">Let's get some work done!</h2>
+              <hr/>
+              <List  items={this.state.items}
+                      handleCompleteOrUndo={this.handleCompleteOrUndo}
+                      handleDelete={this.handleDelete}/>
+           </div>
+      </div>
+  )
+  }
+} 
 export default App;
