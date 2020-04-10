@@ -17,14 +17,17 @@ class App extends React.Component {
   };
 
   handleChange = e => {
+    const {value, name}=e.target
     this.setState({
-      input: e.target.value
+      [name]: value
     });
   };
 
-  handleAddItem = () => {
+  handleAddItem = e => {
+    e.preventDefault();
     this.setState({
-      items:[...this.state.items,{text:this.state.input}]
+      items:[...this.state.items,{text:this.state.input}],
+      input: ""
     })
   }
 
@@ -47,7 +50,8 @@ class App extends React.Component {
             <header>
               <h1>To-Do-App!</h1>    
               <h4>Add New To-Do</h4>  
-              <Input  input={this.input} 
+              <Input  name="input"
+                      value={this.state.input} 
                       handleChange={this.handleChange}
                       handleAddItem={this.handleAddItem}/> 
            </header>
